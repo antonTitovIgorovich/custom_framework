@@ -7,6 +7,7 @@ ini_set('display_errors', '1');
 ### Autoload
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Diactoros\ServerRequestFactory;
+use Framework\Http\ResponseSender;
 
 chdir(dirname(__DIR__));
 require 'vendor/autoload.php';
@@ -21,11 +22,7 @@ $name = $request->getQueryParams()['name'] ?? 'Guest';
 $response = (new HtmlResponse('Hello, ' . $name . '!'))
 				->withHeader('X-Developer', 'Anton_T');
 
-### Seeding
-header('HTTP/1.0 ' . $response->getStatusCode() . ' ' . $response->getReasonPhrase());
+### Sending
 
-foreach ($response->getHeaders() as $name => $value) {
-	header($name . ":" . implode(' ,', $value));
-}
-
-echo $response->getBody();
+$sender = new ResponseSender();
+$sender->send($response);
