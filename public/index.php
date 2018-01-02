@@ -17,10 +17,10 @@ require 'vendor/autoload.php';
 $request = ServerRequestFactory::fromGlobals();
 
 ### Action
-$name = $request->getQueryParams()['name'] ?? 'Guest';
+$path = $request->getUri()->getPath();
 
-$response = (new HtmlResponse('Hello, ' . $name . '!'))
-				->withHeader('X-Developer', 'Anton_T');
+$response = (new HtmlResponse('Path is ' . $path))
+			->withHeader('X-Developer', 'Anton_T');
 
 ### Sending
 
