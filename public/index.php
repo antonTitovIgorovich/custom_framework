@@ -6,8 +6,8 @@ ini_set('display_errors', '1');
 
 ### Autoload
 use Zend\Diactoros\Response\HtmlResponse;
+use Zend\Diactoros\Response\SapiEmitter;
 use Zend\Diactoros\ServerRequestFactory;
-use Framework\Http\ResponseSender;
 
 chdir(dirname(__DIR__));
 require 'vendor/autoload.php';
@@ -24,5 +24,5 @@ $response = (new HtmlResponse('Hello, ' . $name . '!'))
 
 ### Sending
 
-$sender = new ResponseSender();
-$sender->send($response);
+$emitter = new SapiEmitter();
+$emitter->emit($response);
