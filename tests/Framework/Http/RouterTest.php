@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 namespace Tests\Framework\Http;
 
-use Framework\Http\Router\Exception\RequestNotMathedException;
-use Framework\Http\Router\RoteCollection;
-use Framework\Http\Router\Roter;
+use Framework\Http\Router\Exception\RequestNotMatchedException;
+use Framework\Http\Router\RouteCollection;
+use Framework\Http\Router\Router;
 use PHPUnit\Framework\TestCase;
 use Zend\Diactoros\ServerRequest;
 use Zend\Diactoros\Uri;
@@ -13,7 +13,7 @@ class RouterTest extends TestCase
 {
 	public function testCorrectMethod()
 	{
-		$routes = new RouterCollection();
+		$routes = new RouteCollection();
 
 		$routes->get($nameGet = 'blog', '/blog', $handlerGet = 'handler_get');
 		$routes->post($namePost = 'blog_edit', '/blog', $handlerPost = 'handler_post');
@@ -31,21 +31,24 @@ class RouterTest extends TestCase
 
 	public function testMissingMethod()
 	{
-		$routes = new RoteCollection();
+		$routes = new RouteCollection();
 
 		$routes->post('blog', '/blog', 'handler_post');
 
-		$router = new Roter();
+		$router = new Router($routes);
 
-		$this->expectException(RequestNotMathedException::class);
+		$this->expectException(RequestNotMatchedException::class);
 		$router->match($this->buildRequest('DELETE', '/blog'));
 	}
 
 	public function testCorrectAttributes()
 	{
-		$routes = new RoteCollection();
+		$routes = new RouteCollection();
+
 		$routes->get($name = 'blog_show', '/blog/{id}', 'handler', ['id' => '\d+']);
+
 		$router = new Router($routes);
+
 		$result = $router->match($this->buildRequest('GET', '/blog/5'));
 
 		self::assertEquals($name, $result->getName());
@@ -55,30 +58,34 @@ class RouterTest extends TestCase
 	public function testIncorrectAttributes()
 	{
 		$routes = new RouteCollection();
+
 		$routes->get($name = 'blog_show', '/blog/{id}', 'handler', ['id' => '\d+']);
+
 		$router = new Router($routes);
 
-		$this->expectException(RequestNotMathedException::class);
-		$routes->match($this->buildRequest('GET', '/blog/slug'));
-
+		$this->expectException(RequestNotMatchedException::class);
+		$router->match($this->buildRequest('GET', '/blog/slug'));
 	}
 
 	public function testGenerate()
 	{
-		$routes = new RoteCollection();
+		$routes = new RouteCollection();
+
 		$routes->get('blog', '/blog', 'handler');
-		$routes->get('blog_show', '/blog/{id}', 'handler', ['id' => '\id+']);
+		$routes->get('blog_show', '/blog/{id}', 'handler', ['id' => '\d+']);
 
 		$router = new Router($routes);
 
 		self::assertEquals('/blog', $router->generate('blog'));
-		self::assertEquals('/blog/5', $router->generate('blog_show', ['id' => '5']));
+		self::assertEquals('/blog/5', $router->generate('blog_show', ['id' => 5]));
 	}
 
 	public function testGenerateMissingAttributes()
 	{
-		$routes = new RoteCollection();
+		$routes = new RouteCollection();
+
 		$routes->get($name = 'blog_show', '/blog/{id}', 'handler', ['id' => '\d+']);
+
 		$router = new Router($routes);
 
 		$this->expectException(\InvalidArgumentException::class);
@@ -88,7 +95,7 @@ class RouterTest extends TestCase
 	private function buildRequest($method, $uri): ServerRequest
 	{
 		return (new ServerRequest())
-				->withMethod($method)
-				->withUri(new Uri($uri));		
+			->withMethod($method)
+			->withUri(new Uri($uri));
 	}
 }
