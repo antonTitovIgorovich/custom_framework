@@ -4,11 +4,11 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
 use Framework\Http\Router\Exception\RequestNotMatchedException;
-use \Framework\Http\Router\AuraRouterAdapter;
+use Framework\Http\Router\AuraRouterAdapter;
+use Framework\Http\Router\ActionResolver;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Diactoros\Response\SapiEmitter;
 use Zend\Diactoros\ServerRequestFactory;
-use Framework\Http\Router\ActionResolver;
 
 chdir(dirname(__DIR__));
 require 'vendor/autoload.php';

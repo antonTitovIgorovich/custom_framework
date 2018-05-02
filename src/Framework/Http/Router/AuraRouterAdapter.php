@@ -20,6 +20,7 @@ class AuraRouterAdapter implements Router
 	public function match(ServerRequestInterface $request): Result
 	{
 		$matcher = $this->aura->getMatcher();
+
 		if ($route = $matcher->match($request)){
 			return new Result($route->name, $route->handler, $route->attributes);
 		}
