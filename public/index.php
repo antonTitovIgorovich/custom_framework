@@ -3,7 +3,6 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-use Framework\Http\Router\Exception\RequestNotMatchedException;
 use Framework\Http\Router\AuraRouterAdapter;
 use Framework\Http\Router\MiddlewareResolver;
 use Framework\Http\Application;
@@ -36,25 +35,16 @@ $router = new AuraRouterAdapter($aura);
 
 $resolver = new MiddlewareResolver();
 $app = new Application($resolver, new App\Middleware\NotFoundHandler());
+
 $app->pipe(new App\Middleware\ErrorHandlerMiddleware($param['debug']));
 $app->pipe(App\Middleware\ProfilerMiddleware::class);
 $app->pipe(App\Middleware\CredentialsMiddleware::class);
+$app->pipe(new Framework\Http\Middleware\RouteMiddleware($router));
+$app->pipe(new Framework\Http\Middleware\DispatchMiddleware($resolver));
 
 ### Running
 
 $request = ServerRequestFactory::fromGlobals();
-
-try {
-	$result = $router->match($request);
-	foreach ($result->getAttributes() as $attribute => $value) {
-		$request = $request->withAttribute($attribute, $value);
-	}
-
-	$app->pipe($result->getHandler());
-
-} catch (RequestNotMatchedException $e) {
-}
-
 $response = $app->run($request);
 
 ### Sending
