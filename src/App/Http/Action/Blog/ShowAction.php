@@ -2,7 +2,7 @@
 
 namespace App\Action\Blog;
 
-use Psr\Http\Message\ServerRequestInterface as Request ;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Diactoros\Response\JsonResponse;
 
