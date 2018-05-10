@@ -25,7 +25,7 @@ class ErrorHandlerMiddleware
 					'error' => 'Server error',
 					'code' => $e->getCode(),
 					'message' => $e->getMessage(),
-//					'trace' => $e->getTrace()
+					'trace' => $e->getTrace()
 				]);
 			}
 			return new HtmlResponse('Server error', 500);

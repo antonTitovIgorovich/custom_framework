@@ -9,6 +9,7 @@ use Zend\Diactoros\Response\HtmlResponse;
 class IndexAction
 {
 	function __invoke(Request $request) {
+
 		$name = $request->getQueryParams()['name'] ?? 'Guest';
 
 		return new HtmlResponse('Hello, ' . $name . '!');

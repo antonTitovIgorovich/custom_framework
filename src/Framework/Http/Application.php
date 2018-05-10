@@ -2,29 +2,48 @@
 
 namespace Framework\Http;
 
-use Framework\Http\Pipeline\Pipeline;
-use Framework\Http\Router\MiddlewareResolver;
+use Framework\Http\Pipeline\MiddlewareResolver;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Zend\Stratigility\MiddlewarePipe;
 
-class Application extends Pipeline
+class Application extends MiddlewarePipe
 {
 	private $resolver;
 	private $default;
+	private $basePath = null;
 
-	public function __construct(MiddlewareResolver $resolver, callable $default)
+	public function __construct(MiddlewareResolver $resolver, callable $default, ResponseInterface $response)
 	{
 		parent::__construct();
 		$this->resolver = $resolver;
+		$this->setResponsePrototype($response);
 		$this->default = $default;
 	}
 
-	public function pipe($middleware)
+    /**
+     * @param string $basePath
+     */
+	public function withBasePath($basePath = null)
+    {
+	    is_string($basePath) && $this->basePath = $basePath;
+    }
+
+	public function pipe($path, $middleware = null): MiddlewarePipe
 	{
-		parent::pipe($this->resolver->resolve($middleware));
+	    if ($middleware === null){
+            return parent::pipe($this->resolver->resolve($path, $this->responsePrototype));
+        }
+
+        if (isset($this->basePath)) {
+	        $path = $this->basePath . $path;
+	    }
+
+        return parent::pipe($path, $this->resolver->resolve($middleware, $this->responsePrototype));
 	}
 
-	public function run(ServerRequestInterface $request)
+	public function run(ServerRequestInterface $request, ResponseInterface $response)
 	{
-		return $this($request, $this->default);
+		return $this($request, $response, $this->default);
 	}
 }
