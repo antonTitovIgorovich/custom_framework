@@ -1,7 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mashine
- * Date: 11.05.18
- * Time: 14:32
- */
+
+$container = new Framework\Container\Container();
+
+$container->set('config', require 'config/parameters.php');
+
+require 'config/dependencies.php';
+
+return $container;

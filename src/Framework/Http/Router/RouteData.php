@@ -3,7 +3,7 @@
 namespace Framework\Http\Router;
 
 
-class RouterData
+class RouteData
 {
     public $name;
     public $path;

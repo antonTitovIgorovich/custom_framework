@@ -64,6 +64,46 @@ class ContainerTest extends TestCase
         self::assertInstanceOf(stdClass::class, $value);
     }
 
+    public function testAutoInstantiating()
+    {
+        $container = new Container();
+
+        self::assertNotNull($value1 = $container->get(\stdClass::class));
+        self::assertNotNull($value2 = $container->get(\stdClass::class));
+
+        self::assertInstanceOf(\stdClass::class, $value1);
+        self::assertInstanceOf(\stdClass::class, $value2);
+
+        self::assertSame($value1, $value2);
+    }
+
+    public function testAutowiring()
+    {
+        $container = new Container();
+
+        $outer = $container->get(Outer::class);
+
+        self::assertNotNull($outer);
+        self::assertInstanceOf(Outer::class, $outer);
+
+        self::assertNotNull($middle = $outer->middle);
+        self::assertInstanceOf(Middle::class, $middle);
+
+        self::assertNotNull($inner = $middle->inner);
+        self::assertInstanceOf(Inner::class, $inner);
+    }
+
+    public function testAutowiringScalarWithDefault()
+    {
+        $container = new Container();
+        $scalar = $container->get(ScalarWithArrayAndDefault::class);
+
+        self::assertNotNull($inner = $scalar->inner);
+        self::assertInstanceOf(Inner::class, $inner);
+
+        self::assertEquals(10, $scalar->default);
+    }
+
     public function testNotFound()
     {
         $container = new Container();
@@ -71,5 +111,41 @@ class ContainerTest extends TestCase
         $this->expectException(ServiceNotFoundException::class);
 
         $container->get('some');
+    }
+}
+
+class Outer
+{
+    public $middle;
+
+    public function __construct(Middle $middle)
+    {
+        $this->middle = $middle;
+    }
+}
+
+class Middle
+{
+    public $inner;
+
+    public function __construct(Inner $inner)
+    {
+        $this->inner = $inner;
+    }
+}
+
+class Inner{}
+
+class ScalarWithArrayAndDefault
+{
+    public $inner;
+    public $arr;
+    public $default;
+
+    public function __construct(Inner $inner, array $arr, $default = 10)
+    {
+        $this->inner = $inner;
+        $this->arr = $arr;
+        $this->default = $default;
     }
 }

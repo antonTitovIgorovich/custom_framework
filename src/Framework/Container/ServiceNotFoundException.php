@@ -2,13 +2,10 @@
 
 namespace Framework\Container;
 
-
-use Throwable;
-
 class ServiceNotFoundException extends \InvalidArgumentException
 {
-    public function __construct(string $message)
+    public function __construct(string $id)
     {
-        parent::__construct($message);
+        parent::__construct('Undefined service "' . $id . '"');
     }
 }

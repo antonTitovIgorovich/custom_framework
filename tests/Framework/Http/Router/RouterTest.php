@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Framework\Http;
+namespace Tests\Framework\Http\Router;
 
 use Aura\Router\RouterContainer;
 use Framework\Http\Router\AuraRouterAdapter;

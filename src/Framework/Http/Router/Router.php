@@ -22,4 +22,10 @@ interface Router
 	 * @return string
 	 */
 	public function generate($name, array $params = []): string;
+
+    /**
+     * @param RouteData $data
+     * @return void
+     */
+	public function addRoute(RouteData $data);
 }

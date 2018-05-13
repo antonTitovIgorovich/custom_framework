@@ -6,7 +6,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Diactoros\Response\JsonResponse;
 
-class ErrorHandlerMiddleware
+class   ErrorHandlerMiddleware
 {
 	private $debug;
 

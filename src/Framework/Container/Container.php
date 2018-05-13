@@ -15,7 +15,28 @@ class Container
         }
 
         if (!array_key_exists($id, $this->definitions)){
-            throw new ServiceNotFoundException('Undefined parameter "' . $id . '"');
+            if (class_exists($id)){
+                $reflection = new \ReflectionClass($id);
+                $arguments = [];
+
+                if (($constructor = $reflection->getConstructor()) !== null){
+                    foreach ($constructor->getParameters() as $parameter) {
+                          if ($paramClass = $parameter->getClass()) {
+                             $arguments[] = $this->get($paramClass->getName());
+                          } elseif ($parameter->isArray()) {
+                              $arguments[] = [];
+                          } else {
+                             if (!$parameter->isDefaultValueAvailable()) {
+                                 throw new ServiceNotFoundException('Unable to resolve "' . $parameter->getName() . '"" in service "' . $id . '"');
+                             }
+                             $arguments[] = $parameter->getDefaultValue();
+                        }
+                    }
+                }
+                $result = $reflection->newInstanceArgs($arguments);
+                return $this->results[$id] = $result;
+            }
+            throw new ServiceNotFoundException($id);
         }
 
         $definition =  $this->definitions[$id];
@@ -35,5 +56,10 @@ class Container
             unset($this->results[$id]);
         }
         $this->definitions[$id] = $value;
+    }
+
+    public function has($id): bool
+    {
+        return array_key_exists($id, $this->definitions) || class_exists($id);
     }
 }
