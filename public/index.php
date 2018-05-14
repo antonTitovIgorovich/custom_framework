@@ -10,7 +10,7 @@ use Zend\Diactoros\Response;
 
 /**
  * @var Framework\Http\Application $app
- * @var Framework\Container\Container $container
+ * @var Zend\ServiceManager\ServiceManager $container
  */
 
 chdir(dirname(__DIR__));
