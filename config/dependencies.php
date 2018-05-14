@@ -9,33 +9,36 @@ use Zend\Diactoros\Response;
 use App\Middleware\ErrorHandlerMiddleware;
 use App\Middleware\BasicAuthMiddleware;
 
-/** @var \Framework\Container\Container $container */
+return [
+    Application::class => function (Container $container){
+        $app = new Application(
+            $container->get(MiddlewareResolver::class),
+            $container->get(Router::class),
+            new App\Middleware\NotFoundHandler(),
+            new Response()
+        );
+        $app->basePath($container->get('config')['basePath'] ?? null);
 
-$container->set(Application::class, function (Container $container){
-    $app = new Application(
-        $container->get(MiddlewareResolver::class),
-        $container->get(Router::class),
-        new App\Middleware\NotFoundHandler(),
-        new Response()
-    );
-    $app->basePath($container->get('config')['basePath'] ?? null);
+        return $app;
+    },
 
-    return $app;
-});
+    MiddlewareResolver::class => function (Container $container){
+        return new MiddlewareResolver($container);
+    },
 
-$container->set(MiddlewareResolver::class, function (Container $container){
-    return new MiddlewareResolver($container);
-});
+    ErrorHandlerMiddleware::class => function (Container $container){
+        return new App\Middleware\ErrorHandlerMiddleware($container->get('config')['debug']);
+    },
 
-$container->set(ErrorHandlerMiddleware::class, function (Container $container){
-    return new App\Middleware\ErrorHandlerMiddleware($container->get('config')['debug']);
-});
+    BasicAuthMiddleware::class => function (Container $container){
+        return new App\Middleware\BasicAuthMiddleware($container->get('config')['user']);
+    },
 
-$container->set(BasicAuthMiddleware::class, function (Container $container){
-    return new App\Middleware\BasicAuthMiddleware($container->get('config')['user']);
-});
+    Router::class => function (){
+        return new AuraRouterAdapter(new Aura\Router\RouterContainer());
+    }
+];
 
-$container->set(Router::class, function (){
-    return new AuraRouterAdapter(new Aura\Router\RouterContainer());
-});
+
+
 

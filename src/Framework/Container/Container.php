@@ -2,11 +2,17 @@
 
 namespace Framework\Container;
 
+use Psr\Container\ContainerInterface;
 
-class Container
+class Container implements ContainerInterface
 {
     private $definitions = [];
     private $results = [];
+
+    public function __construct($definitions)
+    {
+        $this->definitions = $definitions;
+    }
 
     public function get($id)
     {
