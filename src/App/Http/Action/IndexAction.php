@@ -17,7 +17,7 @@ class IndexAction
 
     function __invoke(Request $request) {
 		$name = $request->getQueryParams()['name'] ?? 'Guest';
-		return new HtmlResponse($this->template->render('hello', compact('name')));
+		return new HtmlResponse($this->template->render('app/hello', compact('name')));
 	}
 
 }
