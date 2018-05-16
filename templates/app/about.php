@@ -18,4 +18,6 @@ $this->extend('layout/columns');
 </div>
 <?php $this->endBlock(); ?>
 
+<?php $this->beginBlock('content'); ?>
 <h1>About the site</h1>
+<?php $this->endBlock(); ?>

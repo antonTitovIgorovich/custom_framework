@@ -7,7 +7,6 @@ class PhpRenderer implements TemplateRenderer
 {
     private $path;
     private $extend;
-    private $params = [];
     private $blocks = [];
     private $blockNames;
 
@@ -38,7 +37,7 @@ class PhpRenderer implements TemplateRenderer
             return $content;
         }
 
-        return $this->render($this->extend, compact('content'));
+        return $this->render($this->extend);
     }
 
     public function extend($view)

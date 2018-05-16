@@ -18,4 +18,6 @@ $this->extend('layout/columns');
 </div>
 <?php $this->endBlock(); ?>
 
-<h1>Cabinet of <?= htmlspecialchars($name) ?></h1>
+<?php $this->beginBlock('content'); ?>
+<h1>Cabinet of <?= htmlspecialchars($name) ;?></h1>
+<?php $this->endBlock(); ?>
