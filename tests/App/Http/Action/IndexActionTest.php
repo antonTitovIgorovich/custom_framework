@@ -3,29 +3,28 @@
 namespace Test\App\Http\Action;
 
 use App\Action\IndexAction;
-use PHPUnit\Framework\TestCase;
 use Zend\Diactoros\ServerRequest;
 
-class IndexActionTest extends TestCase
+class IndexActionTest extends BaseActionTestCase
 {
-	public function testGuest()
+    public function testGuest()
 	{
-		$action = new IndexAction();
+		$action = new IndexAction($this->renderer);
 
 		$request = new ServerRequest();
 		$response = $action($request);
 
 		self::assertEquals(200, $response->getStatusCode());
-		self::assertEquals('Hello, Guest!', $response->getBody()->getContents());
+		self::assertContains('Hello Guest!', $response->getBody()->getContents());
 	}
 
 	public function testJohn()
 	{
-		$action = new IndexAction();
+		$action = new IndexAction($this->renderer);
 
 		$request = (new ServerRequest())->withQueryParams(['name' => 'John']);
 		$response = $action($request);
 
-		self::assertEquals('Hello, John!', $response->getBody()->getContents());
+		self::assertContains('Hello John!', $response->getBody()->getContents());
 	}
 }

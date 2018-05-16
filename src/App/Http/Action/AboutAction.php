@@ -2,11 +2,19 @@
 
 namespace App\Action;
 
+use Framework\Template\TemplateRenderer;
 use Zend\Diactoros\Response\HtmlResponse;
 
 class AboutAction
 {
+    private $template;
+
+    public function __construct(TemplateRenderer $template)
+    {
+        $this->template = $template;
+    }
+
 	public function __invoke(){
-		return new HtmlResponse('I am simple suite');
+		return new HtmlResponse($this->template->render('about'));
 	}
 }

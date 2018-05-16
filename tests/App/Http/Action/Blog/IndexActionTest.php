@@ -3,9 +3,9 @@
 namespace Test\App\Http\Action\Blog;
 
 use App\Action\Blog\IndexAction;
-use PHPUnit\Framework\TestCase;
+use Test\App\Http\Action\BaseActionTestCase;
 
-class IndexActionTest extends TestCase
+class IndexActionTest extends BaseActionTestCase
 {
 	public function testSuccess()
 	{

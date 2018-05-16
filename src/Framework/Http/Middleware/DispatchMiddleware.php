@@ -13,6 +13,7 @@ class DispatchMiddleware
 
 	public function __construct(MiddlewareResolver $resolver)
 	{
+
 		$this->resolver = $resolver;
 	}
 

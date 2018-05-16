@@ -6,6 +6,8 @@ use Framework\Http\Application;
 use Framework\Http\Router\Router;
 use Zend\Diactoros\Response;
 use App\Middleware\ErrorHandlerMiddleware;
+use Framework\Template\TemplateRenderer;
+use Framework\Template\PhpRenderer;
 
 return [
     'dependencies' => [
@@ -20,7 +22,7 @@ return [
                     new App\Middleware\NotFoundHandler(),
                     new Response()
                 );
-                $app->basePath($container->get('config')['basePath'] ?? null);
+                $app->withBasePath($container->get('config')['basePath'] ?? null);
 
                 return $app;
             },
@@ -36,8 +38,13 @@ return [
             Router::class => function (){
                 return new AuraRouterAdapter(new Aura\Router\RouterContainer());
             },
+
+            TemplateRenderer::class => function() {
+                return new PhpRenderer('templates');
+            }
         ]
     ],
+
     'debug' => false,
     'basePath' => null,
 ];

@@ -12,7 +12,7 @@ use Zend\Diactoros\Response\EmptyResponse;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Diactoros\ServerRequest;
 use PHPUnit\Framework\TestCase;
-use Test\Framework\Http\SomeContainer;
+use Test\Framework\Http\DummyContainer;
 
 class MiddlewareResolverTest extends TestCase
 {
@@ -21,7 +21,7 @@ class MiddlewareResolverTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->resolver = new MiddlewareResolver(new SomeContainer());
+        $this->resolver = new MiddlewareResolver(new DummyContainer());
     }
 
     /**

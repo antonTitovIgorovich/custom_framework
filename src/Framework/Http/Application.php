@@ -25,27 +25,12 @@ class Application extends MiddlewarePipe
 		$this->default = $default;
 	}
 
-    /**
-     * @param string $basePath
-     * @return Application
-     */
-	public function basePath($basePath = null)
-    {
-	    is_string($basePath) && $this->basePath = $basePath;
-	    return $this;
-    }
-
 	public function pipe($path, $middleware = null): MiddlewarePipe
 	{
 	    if ($middleware === null){
             return parent::pipe($this->resolver->resolve($path, $this->responsePrototype));
         }
-
-        if (isset($this->basePath)) {
-	        $path = $this->basePath . $path;
-	    }
-
-        return parent::pipe($path, $this->resolver->resolve($middleware, $this->responsePrototype));
+        return parent::pipe($this->toWrapPath($path), $this->resolver->resolve($middleware, $this->responsePrototype));
 	}
 
 	public function run(ServerRequestInterface $request, ResponseInterface $response)
@@ -55,8 +40,7 @@ class Application extends MiddlewarePipe
 
     public function route($name, $path, $handler, array $methods, array $options = [])
     {
-        $resultPath = !is_null($this->basePath) ? $this->basePath . $path : $path;
-        $this->router->addRoute(new RouteData($name,  $resultPath, $handler, $methods, $options));
+        $this->router->addRoute(new RouteData($name,  $this->toWrapPath($path), $handler, $methods, $options));
     }
 
     public function get($name, $path, $handler, array $options = [])
@@ -72,5 +56,22 @@ class Application extends MiddlewarePipe
     public function any($name, $path, $handler, array $options = [])
     {
         $this->route($name,  $path, $handler, [], $options);
+    }
+
+    /**
+     * @param string $basePath
+     */
+    public function withBasePath($basePath = null)
+    {
+        is_string($basePath) && $this->basePath = $basePath;
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    private function toWrapPath($path)
+    {
+        return !is_null($this->basePath) ? $this->basePath . $path : $path;
     }
 }
