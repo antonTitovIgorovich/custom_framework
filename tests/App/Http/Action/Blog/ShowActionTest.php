@@ -2,8 +2,8 @@
 
 namespace Test\App\Http\Action\Blog;
 
-use App\Action\Blog\ShowAction;
-use App\Middleware\NotFoundHandler;
+use App\Htp\Action\Blog\ShowAction;
+use App\Http\Middleware\NotFoundHandler;
 use Zend\Diactoros\ServerRequest;
 use PHPUnit\Framework\TestCase;
 

@@ -2,7 +2,7 @@
 
 namespace Test\App\Http\Action;
 
-use App\Action\IndexAction;
+use App\Http\Action\IndexAction;
 use Zend\Diactoros\ServerRequest;
 
 class IndexActionTest extends BaseActionTestCase

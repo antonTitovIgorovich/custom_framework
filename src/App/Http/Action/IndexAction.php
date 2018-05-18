@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Action;
+namespace App\Http\Action;
 
 use Framework\Template\TemplateRenderer;
 use Psr\Http\Message\ServerRequestInterface as Request;

@@ -2,7 +2,7 @@
 
 namespace Test\App\Http\Action\Blog;
 
-use App\Action\Blog\IndexAction;
+use App\Http\Action\Blog\IndexAction;
 use Test\App\Http\Action\BaseActionTestCase;
 
 class IndexActionTest extends BaseActionTestCase

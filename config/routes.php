@@ -1,6 +1,6 @@
 <?php
 
-use App\Action;
+use App\Http\Action;
 
 /** @var \Framework\Http\Application $app */
 

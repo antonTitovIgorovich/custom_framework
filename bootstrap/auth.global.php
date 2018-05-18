@@ -1,12 +1,12 @@
 <?php
 
-use App\Middleware\BasicAuthMiddleware;
+use App\Http\Middleware\BasicAuthMiddleware;
 
 return [
     'dependencies' => [
         'factories' => [
             BasicAuthMiddleware::class => function ($container){
-                return new App\Middleware\BasicAuthMiddleware($container->get('config')['auth']['users']);
+                return new BasicAuthMiddleware($container->get('config')['auth']['users']);
             },
         ],
     ],

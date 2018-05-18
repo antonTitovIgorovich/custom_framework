@@ -8,6 +8,6 @@ return [
             'admin' => 'password',
         ],
     ],
-
-    'basePath' => '/some'
+    /** 'basePath' => null|'/some'  */
+    'basePath' => null
 ];

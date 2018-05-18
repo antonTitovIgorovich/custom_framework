@@ -1,12 +1,13 @@
 <?php
     /** @var \Framework\Template\PhpRenderer $this */
-    $this->params['title'] = 'Hello';
     $this->extend('layout/default');
 ?>
 
-<?php $this->beginBlock('mainContent'); ?>
+<?php $this->beginBlock('title'); ?>Hello<?php $this->endBlock(); ?>
+
+<?php $this->beginBlock('main'); ?>
 <div class="jumbotron">
-    <h1>Hello <?= $name; ?>!</h1>
+    <h1>Hello <?= $this->encode($name); ?>!</h1>
     <p>
         Congratulations! You have successfully created your application.
     </p>

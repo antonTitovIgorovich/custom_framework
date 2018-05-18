@@ -5,7 +5,8 @@ use Framework\Http\Pipeline\MiddlewareResolver;
 use Framework\Http\Application;
 use Framework\Http\Router\Router;
 use Zend\Diactoros\Response;
-use App\Middleware\ErrorHandlerMiddleware;
+use App\Http\Middleware\ErrorHandlerMiddleware;
+use App\Http\Middleware\NotFoundHandler;
 use Framework\Template\TemplateRenderer;
 use Framework\Template\PhpRenderer;
 
@@ -19,7 +20,7 @@ return [
                 $app = new Application(
                     $container->get(MiddlewareResolver::class),
                     $container->get(Router::class),
-                    new App\Middleware\NotFoundHandler(),
+                    $container->get(NotFoundHandler::class),
                     new Response()
                 );
                 $app->withBasePath($container->get('config')['basePath'] ?? null);
@@ -32,20 +33,24 @@ return [
             },
 
             ErrorHandlerMiddleware::class => function ($container){
-                return new App\Middleware\ErrorHandlerMiddleware($container->get('config')['debug']);
+                return new ErrorHandlerMiddleware(
+                    $container->get(TemplateRenderer::class),
+                    $container->get('config')['debug']
+                );
             },
 
             Router::class => function (){
                 return new AuraRouterAdapter(new Aura\Router\RouterContainer());
             },
 
-            TemplateRenderer::class => function() {
-                return new PhpRenderer('templates');
+            TemplateRenderer::class => function($container) {
+                return new PhpRenderer('templates', $container->get(Router::class));
             }
         ]
     ],
 
     'debug' => false,
+    /** 'basePath' => null|'/some'  */
     'basePath' => null,
 ];
 

@@ -17,7 +17,7 @@
 	"autoload": {
 		"psr-4": {
 			"Framework\\": "src/Framework",
-			"App\\": "src/App/Http",
+			"App\\": "src/App",
 			"Test\\": "tests/"
 		}
 	},

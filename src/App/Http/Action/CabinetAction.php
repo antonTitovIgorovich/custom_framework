@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Action;
+namespace App\Http\Action;
 
-use App\Middleware\BasicAuthMiddleware;
+use App\Http\Middleware\BasicAuthMiddleware;
 use Framework\Template\TemplateRenderer;
 use Zend\Diactoros\Response\HtmlResponse;
 use Psr\Http\Message\ServerRequestInterface;

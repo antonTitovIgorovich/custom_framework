@@ -1,12 +1,13 @@
 <?php
 /** @var \Framework\Template\PhpRenderer $this */
-$this->params['title'] = 'About';
 $this->extend('layout/columns');
 ?>
 
+<?php $this->beginBlock('title'); ?>About<?php $this->endBlock(); ?>
+
 <?php $this->beginBlock('breadcrumbs'); ?>
 <ul class="breadcrumb">
-    <li><a href="/">Home</a></li>
+    <li><a href="<?= $this->path('home'); ?>">Home</a></li>
     <li class="active">About</li>
 </ul>
 <?php $this->endBlock(); ?>
