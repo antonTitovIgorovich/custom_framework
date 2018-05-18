@@ -20,7 +20,6 @@ class ShowAction
 
 	public function __invoke(Request $request, callable $next)
 	{
-        throw new \ErrorException('21');
 	    if (!$post = $this->posts->find($request->getAttribute('id'))){
 			return $next($request);
 		}

@@ -9,6 +9,7 @@ use App\Http\Middleware\ErrorHandlerMiddleware;
 use App\Http\Middleware\NotFoundHandler;
 use Framework\Template\TemplateRenderer;
 use Framework\Template\PhpRenderer;
+use Framework\Template\Php\Extension\RouteExtension;
 
 return [
     'dependencies' => [
@@ -44,7 +45,9 @@ return [
             },
 
             TemplateRenderer::class => function($container) {
-                return new PhpRenderer('templates', $container->get(Router::class));
+                $renderer = new PhpRenderer('templates');
+                $renderer->addExtensions($container->get(RouteExtension::class));
+                return $renderer;
             }
         ]
     ],
