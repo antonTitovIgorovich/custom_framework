@@ -23,7 +23,6 @@ class ShowAction
 	    if (!$post = $this->posts->find($request->getAttribute('id'))){
 			return $next($request);
 		}
-
 		return new HtmlResponse($this->template->render('app/blog/show', compact('post')));
 	}
 }

@@ -8,8 +8,7 @@ use Zend\Diactoros\Response;
 use App\Http\Middleware\ErrorHandlerMiddleware;
 use App\Http\Middleware\NotFoundHandler;
 use Framework\Template\TemplateRenderer;
-use Framework\Template\PhpRenderer;
-use Framework\Template\Php\Extension\RouteExtension;
+use Psr\Container\ContainerInterface;
 
 return [
     'dependencies' => [
@@ -17,7 +16,7 @@ return [
             Zend\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory::class
         ],
         'factories' => [
-            Application::class => function ($container){
+            Application::class => function (ContainerInterface $container){
                 $app = new Application(
                     $container->get(MiddlewareResolver::class),
                     $container->get(Router::class),
@@ -29,11 +28,11 @@ return [
                 return $app;
             },
 
-            MiddlewareResolver::class => function ($container){
+            MiddlewareResolver::class => function (ContainerInterface $container){
                 return new MiddlewareResolver($container);
             },
 
-            ErrorHandlerMiddleware::class => function ($container){
+            ErrorHandlerMiddleware::class => function (ContainerInterface $container){
                 return new ErrorHandlerMiddleware(
                     $container->get(TemplateRenderer::class),
                     $container->get('config')['debug']
@@ -43,12 +42,6 @@ return [
             Router::class => function (){
                 return new AuraRouterAdapter(new Aura\Router\RouterContainer());
             },
-
-            TemplateRenderer::class => function($container) {
-                $renderer = new PhpRenderer('templates');
-                $renderer->addExtensions($container->get(RouteExtension::class));
-                return $renderer;
-            }
         ]
     ],
 

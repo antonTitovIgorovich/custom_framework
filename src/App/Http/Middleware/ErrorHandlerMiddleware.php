@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use Framework\Template\PhpRenderer;
+use Framework\Template\TemplateRenderer;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
 
@@ -11,7 +11,7 @@ class ErrorHandlerMiddleware
 	private $debug;
 	private $template;
 
-	public function __construct(PhpRenderer $template,$debug = false)
+	public function __construct(TemplateRenderer $template,$debug = false)
 	{
 		$this->debug = $debug;
 		$this->template = $template;
