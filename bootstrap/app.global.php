@@ -17,25 +17,21 @@ return [
         ],
         'factories' => [
             Application::class => function (ContainerInterface $container){
-                $app = new Application(
+                return (new Application(
                     $container->get(MiddlewareResolver::class),
                     $container->get(Router::class),
-                    $container->get(NotFoundHandler::class),
-                    new Response()
-                );
-                $app->withBasePath($container->get('config')['basePath'] ?? null);
-
-                return $app;
+                    $container->get(NotFoundHandler::class)
+                ));
             },
 
             MiddlewareResolver::class => function (ContainerInterface $container){
-                return new MiddlewareResolver($container);
+                return new MiddlewareResolver($container, new Response());
             },
 
             ErrorHandlerMiddleware::class => function (ContainerInterface $container){
                 return new ErrorHandlerMiddleware(
-                    $container->get(TemplateRenderer::class),
-                    $container->get('config')['debug']
+                    $container->get('config')['debug'],
+                    $container->get(TemplateRenderer::class)
                 );
             },
 
@@ -46,8 +42,6 @@ return [
     ],
 
     'debug' => false,
-    /** 'basePath' => null|'/some'  */
-    'basePath' => null,
 ];
 
 

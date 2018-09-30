@@ -2,20 +2,19 @@
 
 namespace App\Http\Middleware;
 
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class ProfilerMiddleware
+class ProfilerMiddleware implements MiddlewareInterface
 {
-	public function __invoke(ServerRequestInterface $request, callable $next)
-	{
-		$start = microtime(true);
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        $start = microtime(true);
+        $response = $handler->handle($request);
+        $stop = microtime(true);
 
-		/** @var ResponseInterface $response */
-		$response = $next($request);
-
-		$stop = microtime(true);
-
-		return $response->withHeader('X-Profiler', $stop - $start);
-	}
+        return $response->withHeader('X-Profiler-Time', $stop - $start);
+    }
 }

@@ -4,10 +4,12 @@ namespace App\Http\Action;
 
 use App\Http\Middleware\BasicAuthMiddleware;
 use Framework\Template\TemplateRenderer;
-use Zend\Diactoros\Response\HtmlResponse;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Zend\Diactoros\Response\HtmlResponse;
 
-class CabinetAction
+class CabinetAction implements RequestHandlerInterface
 {
     private $template;
 
@@ -16,9 +18,11 @@ class CabinetAction
         $this->template = $template;
     }
 
-	public function __invoke(ServerRequestInterface $request)
-	{
-		$name = $request->getAttribute(BasicAuthMiddleware::ATTRIBUTE);
-		return new HtmlResponse($this->template->render('app/cabinet', compact('name')));
-	}
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        $username = $request->getAttribute(BasicAuthMiddleware::ATTRIBUTE);
+        return new HtmlResponse($this->template->render('app/cabinet', [
+            'name' => $username
+        ]));
+    }
 }

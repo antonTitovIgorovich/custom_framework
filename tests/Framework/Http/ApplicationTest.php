@@ -1,6 +1,6 @@
 <?php
 
-namespace Test\Framework\Http;
+namespace Tests\Framework\Http;
 
 use Framework\Http\Application;
 use Framework\Http\Pipeline\MiddlewareResolver;
@@ -8,58 +8,67 @@ use Framework\Http\Router\Router;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\Response\JsonResponse;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Zend\Diactoros\Response;
+use Zend\Diactoros\Response\JsonResponse;
 use Zend\Diactoros\ServerRequest;
+use Test\Framework\Http\DummyContainer;
 
 class ApplicationTest extends TestCase
 {
+    /**
+     * @var MiddlewareResolver
+     */
     private $resolver;
+    /**
+     * @var Router
+     */
     private $router;
 
     public function setUp()
     {
         parent::setUp();
+        $this->resolver = new MiddlewareResolver(new DummyContainer(), new Response());
         $this->router = $this->createMock(Router::class);
-        $this->resolver = new MiddlewareResolver(new DummyContainer());
     }
 
-    public function testPipe()
-	{
-		$app = new Application($this->resolver, $this->router, new DefaultHandler(), new Response());
+    public function testPipe(): void
+    {
+        $app = new Application($this->resolver, $this->router, new DefaultHandler());
 
-		$app->pipe(new Middleware1());
-		$app->pipe(new Middleware2());
+        $app->pipe(new Middleware1());
+        $app->pipe(new Middleware2());
 
-		$response = $app->run(new ServerRequest(), new Response());
+        $response = $app->handle(new ServerRequest());
 
-		$this->assertJsonStringEqualsJsonString(
-			json_encode(['middleware-1' => 1, 'middleware-2' => 2]),
-			$response->getBody()->getContents()
-		);
-	}
+        $this->assertJsonStringEqualsJsonString(
+            json_encode(['middleware-1' => 1, 'middleware-2' => 2]),
+            $response->getBody()->getContents()
+        );
+    }
 }
 
-class Middleware1
+class Middleware1 implements MiddlewareInterface
 {
-	public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
-	{
-		return $next($request->withAttribute('middleware-1', 1));
-	}
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        return $handler->handle($request->withAttribute('middleware-1', 1));
+    }
 }
 
-class Middleware2
+class Middleware2 implements MiddlewareInterface
 {
-	public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
-	{
-		return $next($request->withAttribute('middleware-2', 2));
-	}
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        return $handler->handle($request->withAttribute('middleware-2', 2));
+    }
 }
 
-class DefaultHandler
+class DefaultHandler implements RequestHandlerInterface
 {
-	public function __invoke(ServerRequestInterface $request)
-	{
-		return new JsonResponse($request->getAttributes());
-	}
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new JsonResponse($request->getAttributes());
+    }
 }

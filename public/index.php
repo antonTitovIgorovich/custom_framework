@@ -5,8 +5,7 @@ ini_set('display_errors', '1');
 
 use Framework\Http\Application;
 use Zend\Diactoros\ServerRequestFactory;
-use Zend\Diactoros\Response\SapiEmitter;
-use Zend\Diactoros\Response;
+use Zend\HttpHandlerRunner\Emitter\SapiEmitter;
 
 /**
  * @var Framework\Http\Application $app
@@ -23,7 +22,7 @@ require 'config/pipeline.php';
 require 'config/routes.php';
 
 $request = ServerRequestFactory::fromGlobals();
-$response = $app->run($request, new Response());
+$response = $app->handle($request);
 
 $emitter = new SapiEmitter();
 $emitter->emit($response);
