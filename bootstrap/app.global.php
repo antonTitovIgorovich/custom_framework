@@ -5,10 +5,12 @@ use Framework\Http\Pipeline\MiddlewareResolver;
 use Framework\Http\Application;
 use Framework\Http\Router\Router;
 use Zend\Diactoros\Response;
-use App\Http\Middleware\ErrorHandlerMiddleware;
 use App\Http\Middleware\NotFoundHandler;
 use Framework\Template\TemplateRenderer;
 use Psr\Container\ContainerInterface;
+use App\Http\Middleware\ErrorHandler\ErrorHandlerMiddleware;
+use App\Http\Middleware\ErrorHandler\ErrorResponseGenerator;
+use App\Http\Middleware\ErrorHandler\HtmlErrorResponseGenerator;
 
 return [
     'dependencies' => [
@@ -16,7 +18,7 @@ return [
             Zend\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory::class
         ],
         'factories' => [
-            Application::class => function (ContainerInterface $container){
+            Application::class => function (ContainerInterface $container) {
                 return (new Application(
                     $container->get(MiddlewareResolver::class),
                     $container->get(Router::class),
@@ -24,18 +26,24 @@ return [
                 ));
             },
 
-            MiddlewareResolver::class => function (ContainerInterface $container){
+            MiddlewareResolver::class => function (ContainerInterface $container) {
                 return new MiddlewareResolver($container, new Response());
             },
 
-            ErrorHandlerMiddleware::class => function (ContainerInterface $container){
+            ErrorHandlerMiddleware::class => function (ContainerInterface $container) {
                 return new ErrorHandlerMiddleware(
+                    $container->get(ErrorResponseGenerator::class)
+                );
+            },
+
+            ErrorResponseGenerator::class => function (ContainerInterface $container) {
+                return new HtmlErrorResponseGenerator(
                     $container->get('config')['debug'],
                     $container->get(TemplateRenderer::class)
                 );
             },
 
-            Router::class => function (){
+            Router::class => function () {
                 return new AuraRouterAdapter(new Aura\Router\RouterContainer());
             },
         ]
