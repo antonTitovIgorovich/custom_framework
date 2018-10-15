@@ -4,9 +4,17 @@ use Framework\Http\Router\AuraRouterAdapter;
 use Framework\Http\Pipeline\MiddlewareResolver;
 use Framework\Http\Application;
 use Framework\Http\Router\Router;
+use Infrastructure\Framework\Http\ApplicationFactory;
 use Zend\Diactoros\Response;
-use App\Http\Middleware\NotFoundHandler;
 use Psr\Container\ContainerInterface;
+use Infrastructure\Framework\Http\Logger\LoggerFactory;
+use Infrastructure\App\Http\Middleware\ErrorHandler\PrettyErrorResponseGeneratorFactory;
+use Infrastructure\Framework\Http\Middleware\ErrorHandler\ErrorHandlerMiddlewareFactory;
+use Infrastructure\Framework\Http\Middleware\ErrorHandler\WhoopsErrorResponseGeneratorFactory;
+use Framework\Http\Middleware\ErrorHandler\ErrorHandlerMiddleware;
+use Framework\Http\Middleware\ErrorHandler\ErrorResponseGenerator;
+use Psr\Log\LoggerInterface;
+use Whoops\RunInterface;
 
 return [
     'dependencies' => [
@@ -14,13 +22,7 @@ return [
             Zend\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory::class
         ],
         'factories' => [
-            Application::class => function (ContainerInterface $container) {
-                return (new Application(
-                    $container->get(MiddlewareResolver::class),
-                    $container->get(Router::class),
-                    $container->get(NotFoundHandler::class)
-                ));
-            },
+            Application::class => ApplicationFactory::class,
 
             MiddlewareResolver::class => function (ContainerInterface $container) {
                 return new MiddlewareResolver($container, new Response());
@@ -29,6 +31,11 @@ return [
             Router::class => function () {
                 return new AuraRouterAdapter(new Aura\Router\RouterContainer());
             },
+
+            ErrorHandlerMiddleware::class => ErrorHandlerMiddlewareFactory::class,
+            ErrorResponseGenerator::class => PrettyErrorResponseGeneratorFactory::class,
+            RunInterface::class => WhoopsErrorResponseGeneratorFactory::class,
+            LoggerInterface::class => LoggerFactory::class,
         ]
     ],
 ];
