@@ -1,31 +1,25 @@
 <?php
 
+use Framework\Http\Middleware\ErrorHandler\LogErrorListener;
 use Whoops\RunInterface;
 use Framework\Template\TemplateRenderer;
 use Psr\Container\ContainerInterface;
-use Framework\Http\Middleware\ErrorHandler\WhoopsErrorResponseGenerator;
 use Framework\Http\Middleware\ErrorHandler\ErrorHandlerMiddleware;
 use Framework\Http\Middleware\ErrorHandler\ErrorResponseGenerator;
 use App\Http\Middleware\ErrorHandler\PrettyErrorResponseGenerator;
+use Psr\Log\LoggerInterface;
 
 return [
     'dependencies' => [
         'factories' => [
 
             ErrorHandlerMiddleware::class => function (ContainerInterface $container) {
-                return new ErrorHandlerMiddleware(
-                    $container->get(ErrorResponseGenerator::class)
-                );
+                $middleware = new ErrorHandlerMiddleware($container->get(ErrorResponseGenerator::class));
+                $middleware->addListener($container->get(LogErrorListener::class));
+                return $middleware;
             },
 
             ErrorResponseGenerator::class => function (ContainerInterface $container) {
-
-                if ($container->get('config')['debug']) {
-                    return new WhoopsErrorResponseGenerator(
-                        $container->get(RunInterface::class),
-                        new Zend\Diactoros\Response()
-                    );
-                }
 
                 return new PrettyErrorResponseGenerator(
                     $container->get(TemplateRenderer::class),
@@ -44,6 +38,14 @@ return [
                 $whoops->pushHandler(new Whoops\Handler\PrettyPageHandler());
                 $whoops->register();
                 return $whoops;
+            },
+
+            LoggerInterface::class => function (ContainerInterface $container) {
+                $logger = new Monolog\Logger('App');
+                $logger->pushHandler(new \Monolog\Handler\StreamHandler(
+                    'var/log/application.log', \Monolog\Logger::WARNING
+                ));
+                return $logger;
             },
         ]
     ],

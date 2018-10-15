@@ -1,0 +1,34 @@
+<?php
+
+use Whoops\RunInterface;
+use Psr\Container\ContainerInterface;
+use Framework\Http\Middleware\ErrorHandler\WhoopsErrorResponseGenerator;
+use Framework\Http\Middleware\ErrorHandler\ErrorResponseGenerator;
+use Psr\Log\LoggerInterface;
+
+return [
+    'dependencies' => [
+        'factories' => [
+
+            ErrorResponseGenerator::class => function (ContainerInterface $container) {
+                return new WhoopsErrorResponseGenerator(
+                    $container->get(RunInterface::class),
+                    new Zend\Diactoros\Response()
+                );
+            },
+
+            LoggerInterface::class => function () {
+                $logger = new Monolog\Logger('App');
+                $logger->pushHandler(new \Monolog\Handler\StreamHandler('var/log/application.log', \Monolog\Logger::DEBUG));
+                return $logger;
+            },
+        ]
+    ],
+
+    'debug' => true,
+];
+
+
+
+
+

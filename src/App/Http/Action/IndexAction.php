@@ -19,6 +19,7 @@ class IndexAction implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+//        throw new \LogicException('dd', 420);
         return new HtmlResponse($this->template->render('app/hello', ['name' => 'Name']));
     }
 }
