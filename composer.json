@@ -32,6 +32,7 @@
   "scripts": {
     "test": "vendor/bin/phpunit --colors=always",
     "dev-enable": "cp bootstrap/development.local.php.dist bootstrap/development.local.php",
-    "dev-disable": "rm bootstrap/development.local.php"
+    "dev-disable": "rm bootstrap/development.local.php",
+    "clear-config-cache": "rm var/config_cache.php"
   }
 }
