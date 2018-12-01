@@ -3,10 +3,8 @@
 
 namespace App\Http\Middleware\ErrorHandler;
 
-
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
-
 
 class AcceptErrorResponseGenerator implements ErrorResponseGenerator
 {
@@ -26,7 +24,7 @@ class AcceptErrorResponseGenerator implements ErrorResponseGenerator
         $parts = explode(';', $accept);
         $mime = trim(array_shift($parts));
 
-        if (preg_match('#[/+]json$#', $mime)){
+        if (preg_match('#[/+]json$#', $mime)) {
             return $this->json->generate($request, $e);
         }
 

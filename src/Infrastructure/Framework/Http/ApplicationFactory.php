@@ -9,7 +9,6 @@ use Framework\Http\Router\Router;
 use App\Http\Middleware\NotFoundHandler;
 use Psr\Container\ContainerInterface;
 
-
 class ApplicationFactory
 {
     public function __invoke(ContainerInterface $container)

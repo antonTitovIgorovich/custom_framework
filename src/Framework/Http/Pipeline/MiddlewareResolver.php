@@ -45,7 +45,7 @@ class MiddlewareResolver
                 $method = $reflection->getMethod('__invoke');
                 $parameters = $method->getParameters();
                 if (count($parameters) === 2 && $parameters[1]->isCallable()) {
-                   return new SinglePassMiddlewareDecorator($handler);
+                    return new SinglePassMiddlewareDecorator($handler);
                 }
                 return new DoublePassMiddlewareDecorator($handler, $this->responsePrototype);
             }

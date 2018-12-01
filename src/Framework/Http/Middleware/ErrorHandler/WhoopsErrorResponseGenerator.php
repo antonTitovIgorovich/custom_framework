@@ -3,7 +3,6 @@
 
 namespace Framework\Http\Middleware\ErrorHandler;
 
-
 use Psr\Http\Message\ServerRequestInterface;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\RunInterface;

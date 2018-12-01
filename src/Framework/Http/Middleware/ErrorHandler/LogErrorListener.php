@@ -3,7 +3,6 @@
 
 namespace Framework\Http\Middleware\ErrorHandler;
 
-
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 

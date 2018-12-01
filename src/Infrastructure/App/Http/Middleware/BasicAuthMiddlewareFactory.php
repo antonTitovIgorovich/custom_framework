@@ -3,7 +3,6 @@
 
 namespace Infrastructure\App\Http\Middleware;
 
-
 use Psr\Container\ContainerInterface;
 use Zend\Diactoros\Response;
 use App\Http\Middleware\BasicAuthMiddleware;

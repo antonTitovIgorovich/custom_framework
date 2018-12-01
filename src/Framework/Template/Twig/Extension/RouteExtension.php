@@ -2,7 +2,6 @@
 
 namespace Framework\Template\Twig\Extension;
 
-
 use Framework\Http\Router\Router;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -27,5 +26,4 @@ class RouteExtension extends AbstractExtension
     {
         return $this->router->generate($name, $params);
     }
-
 }

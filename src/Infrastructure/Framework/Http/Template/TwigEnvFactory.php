@@ -3,7 +3,6 @@
 
 namespace Infrastructure\Framework\Http\Template;
 
-
 use Psr\Container\ContainerInterface;
 use Twig\Loader\FilesystemLoader;
 use Twig\Environment;
@@ -27,13 +26,13 @@ class TwigEnvFactory
             'auto_reload' => $debug
         ]);
 
-        if ($debug){
+        if ($debug) {
             $environment->addExtension(new DebugExtension());
         }
 
         $environment->addExtension($container->get(RouteExtension::class));
 
-        foreach ($config['extensions'] as $extension){
+        foreach ($config['extensions'] as $extension) {
             $environment->addExtension($container->get($extension));
         }
 

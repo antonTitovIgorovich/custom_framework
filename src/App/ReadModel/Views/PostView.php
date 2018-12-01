@@ -16,5 +16,4 @@ class PostView
         $this->title = $title;
         $this->content = $content;
     }
-
 }

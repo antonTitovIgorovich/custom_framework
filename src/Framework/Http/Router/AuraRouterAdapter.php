@@ -11,35 +11,35 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AuraRouterAdapter implements Router
 {
-	private $aura;
+    private $aura;
 
-	public function __construct(RouterContainer $aura)
-	{
-		$this->aura = $aura;
-	}
+    public function __construct(RouterContainer $aura)
+    {
+        $this->aura = $aura;
+    }
 
-	public function match(ServerRequestInterface $request): Result
-	{
-		$matcher = $this->aura->getMatcher();
+    public function match(ServerRequestInterface $request): Result
+    {
+        $matcher = $this->aura->getMatcher();
 
-		if ($route = $matcher->match($request)){
-			return new Result($route->name, $route->handler, $route->attributes);
-		}
+        if ($route = $matcher->match($request)) {
+            return new Result($route->name, $route->handler, $route->attributes);
+        }
 
-		throw new RequestNotMatchedException($request);
-	}
+        throw new RequestNotMatchedException($request);
+    }
 
-	public function generate($name, array $params = []): string
-	{
-		$generator = $this->aura->getGenerator();
-		try{
-			return $generator->generate($name, $params);
-		}catch (RouteNotFound $e){
-			throw new RouteNotFoundException($name, $params);
-		}
-	}
+    public function generate($name, array $params = []): string
+    {
+        $generator = $this->aura->getGenerator();
+        try {
+            return $generator->generate($name, $params);
+        } catch (RouteNotFound $e) {
+            throw new RouteNotFoundException($name, $params);
+        }
+    }
 
-	public function addRoute(RouteData $data)
+    public function addRoute(RouteData $data)
     {
         $map = $this->aura->getMap();
 
@@ -49,15 +49,15 @@ class AuraRouterAdapter implements Router
         $route->path($data->path);
         $route->handler($data->handler);
 
-        foreach ($data->options as $key => $value){
+        foreach ($data->options as $key => $value) {
             switch ($key) {
-                case 'tokens' :
+                case 'tokens':
                     $route->tokens($value);
                     break;
-                case 'defaults' :
+                case 'defaults':
                     $route->defaults($value);
                     break;
-                case 'wildcard' :
+                case 'wildcard':
                     $route->wildcard($value);
                     break;
                 default:

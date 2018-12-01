@@ -2,7 +2,6 @@
 
 namespace Framework\Template\Php;
 
-
 abstract class Extension
 {
     /**

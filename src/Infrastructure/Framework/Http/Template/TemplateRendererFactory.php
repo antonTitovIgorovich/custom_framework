@@ -3,7 +3,6 @@
 
 namespace Infrastructure\Framework\Http\Template;
 
-
 use Psr\Container\ContainerInterface;
 use Framework\Template\Twig\TwigRenderer;
 use Twig\Environment;

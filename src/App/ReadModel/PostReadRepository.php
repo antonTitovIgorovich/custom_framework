@@ -4,7 +4,6 @@ namespace App\ReadModel;
 
 use App\ReadModel\Views\PostView;
 
-
 class PostReadRepository
 {
     private $posts;
@@ -25,15 +24,14 @@ class PostReadRepository
         return array_reverse($this->posts);
     }
 
-
     /**
      * @param $id
      * @return PostView|null
      */
     public function find($id)
     {
-        foreach ($this->posts as $post){
-            if ($post->id === (int)$id){
+        foreach ($this->posts as $post) {
+            if ($post->id === (int)$id) {
                 return $post;
             }
         }

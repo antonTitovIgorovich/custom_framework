@@ -12,7 +12,8 @@ class LoggerFactory
     {
         $logger = new Logger('App');
         $logger->pushHandler(new StreamHandler(
-            'var/log/application.log', Logger::WARNING
+            'var/log/application.log',
+            Logger::WARNING
         ));
         return $logger;
     }

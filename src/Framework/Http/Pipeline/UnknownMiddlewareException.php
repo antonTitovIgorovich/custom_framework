@@ -2,7 +2,6 @@
 
 namespace Framework\Http\Pipeline;
 
-
 class UnknownMiddlewareException extends \InvalidArgumentException
 {
     private $type;

@@ -23,5 +23,4 @@ class NotFoundHandler implements RequestHandlerInterface
             'request' => $request,
         ]), 404);
     }
-
 }

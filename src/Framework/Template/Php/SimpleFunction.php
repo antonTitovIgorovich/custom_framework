@@ -2,7 +2,6 @@
 
 namespace Framework\Template\Php;
 
-
 class SimpleFunction
 {
     public $name;

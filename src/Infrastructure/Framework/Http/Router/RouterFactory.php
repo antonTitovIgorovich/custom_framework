@@ -3,7 +3,6 @@
 
 namespace Infrastructure\Framework\Http\Router;
 
-
 use Framework\Http\Router\AuraRouterAdapter;
 use Aura\Router\RouterContainer;
 use Psr\Container\ContainerInterface;

@@ -3,7 +3,6 @@
 
 namespace Infrastructure\Framework\Http\Logger;
 
-
 use Psr\Container\ContainerInterface;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;

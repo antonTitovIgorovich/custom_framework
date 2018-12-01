@@ -3,7 +3,6 @@
 
 namespace Infrastructure\Framework\Http\Middleware;
 
-
 use Psr\Container\ContainerInterface;
 use Framework\Http\Middleware\ErrorHandler\WhoopsErrorResponseGenerator;
 use Whoops\RunInterface;

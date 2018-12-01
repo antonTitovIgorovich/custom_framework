@@ -25,7 +25,7 @@ class RouteExtension extends Extension
 
     public function generatePath(PhpRenderer $renderer, $name, array $params = []): string
     {
-        if (isset($params['encode']) && $params['encode']){
+        if (isset($params['encode']) && $params['encode']) {
             unset($params['encode']);
             return $renderer->encode($this->router->generate($name, $params));
         }

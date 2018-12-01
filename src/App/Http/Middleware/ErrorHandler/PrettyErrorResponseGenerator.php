@@ -14,13 +14,11 @@ class PrettyErrorResponseGenerator implements ErrorResponseGenerator
     private $views;
     private $response;
 
-    public function __construct
-    (
+    public function __construct(
         TemplateRenderer $templateRenderer,
         ResponseInterface $response,
         array $views
-    )
-    {
+    ) {
         $this->template = $templateRenderer;
         $this->views = $views;
         $this->response = $response;

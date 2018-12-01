@@ -3,7 +3,6 @@
 
 namespace Framework\Http\Pipeline;
 
-
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

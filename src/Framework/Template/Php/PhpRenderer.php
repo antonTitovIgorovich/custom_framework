@@ -2,7 +2,6 @@
 
 namespace Framework\Template;
 
-
 use Framework\Http\Router\Router;
 use Framework\Template\Php\Extension;
 
@@ -45,7 +44,7 @@ class PhpRenderer implements TemplateRenderer
     public function render(string $view, array $params = []): string
     {
         $level = ob_get_level();
-        try{
+        try {
             $templateFile =  "$this->path/$view.php";
             ob_start();
             extract($params, EXTR_OVERWRITE);
@@ -55,8 +54,8 @@ class PhpRenderer implements TemplateRenderer
             if (!$this->extend) {
                 return $content;
             }
-        }catch (\Exception $e){
-            while(ob_get_level() > $level){
+        } catch (\Exception $e) {
+            while (ob_get_level() > $level) {
                 ob_end_clean();
             }
             throw $e;
@@ -66,7 +65,7 @@ class PhpRenderer implements TemplateRenderer
 
     public function block($name, $content)
     {
-        if ($this->hasBlock($name)){
+        if ($this->hasBlock($name)) {
             return;
         }
         $this->blocks[$name] = $content;
@@ -82,7 +81,7 @@ class PhpRenderer implements TemplateRenderer
     {
         $content = ob_get_clean();
         $name = $this->blockNames->pop();
-        if ($this->hasBlock($name)){
+        if ($this->hasBlock($name)) {
             return;
         }
         $this->blocks[$name] = $content;
@@ -91,7 +90,7 @@ class PhpRenderer implements TemplateRenderer
     public function renderBlock($name)
     {
         $block = $this->blocks[$name] ?? null;
-        if ($block instanceof \Closure){
+        if ($block instanceof \Closure) {
             return $block();
         }
         return $block ?? '';
@@ -104,7 +103,7 @@ class PhpRenderer implements TemplateRenderer
 
     public function ensureBlock($name)
     {
-        if (!$this->hasBlock($name)){
+        if (!$this->hasBlock($name)) {
             return false;
         }
         $this->beginBlock('name');

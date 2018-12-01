@@ -7,7 +7,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-
 class ErrorHandlerMiddleware implements MiddlewareInterface
 {
     private $responseGenerator;
@@ -23,8 +22,7 @@ class ErrorHandlerMiddleware implements MiddlewareInterface
         try {
             return $handler->handle($request);
         } catch (\Throwable $e) {
-
-            foreach ($this->listeners as $listener){
+            foreach ($this->listeners as $listener) {
                 $listener($e, $request);
             }
             return $this->responseGenerator->generate($request, $e);
