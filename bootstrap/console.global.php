@@ -1,20 +1,21 @@
 <?php
 
-use App\Console\Command;
-use App\Service\FileManager;
+use Infrastructure\Framework\Console\Command\CacheClearCommandFactory;
+use App\Console\Command\CacheClearCommand;
 
 return [
     'dependencies' => [
         'factories' => [
-            Command\CacheClearCommand::class => function (\Psr\Container\ContainerInterface $container) {
-                return new Command\CacheClearCommand(
-                    $container->get('config')['console']['cachePaths'], new FileManager
-                );
-            }
+            CacheClearCommand::class => CacheClearCommandFactory::class
         ]
     ],
 
     'console' => [
+
+        'commands' => [
+            CacheClearCommand::class,
+        ],
+
         'cachePaths' => [
             'twig' => 'var/cache/twig'
         ]
