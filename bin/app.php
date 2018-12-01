@@ -2,9 +2,8 @@
 <?php
 
 use App\Console\Command\CacheClearCommand;
-use Framework\Console\Input;
-use Framework\Console\Output;
-use Framework\Console\Application;
+
+use Symfony\Component\Console\Application;
 
 chdir(dirname(__DIR__));
 require 'vendor/autoload.php';
@@ -20,4 +19,4 @@ foreach ($commands as $command) {
     $cli->add($container->get(CacheClearCommand::class));
 }
 
-$cli->run(new Input($argv), new Output());
+$cli->run();
